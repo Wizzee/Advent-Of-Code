@@ -1,4 +1,5 @@
 import * as dayThree  from "./3/index.js";
+import * as dayFour from "./4/index.js"
 
 import { exit } from "process";
 import yargs from "yargs";
@@ -6,7 +7,8 @@ import { hideBin } from "yargs/helpers";
 const argv = yargs(hideBin(process.argv)).argv;
 
 const days = {
-    3: dayThree
+    3: dayThree,
+    4: dayFour
 }
 
 const getSolution = (day, part) => {
