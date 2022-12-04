@@ -2,7 +2,7 @@ import fs from "fs";
 import { dirname } from "path";
 import { fileURLToPath } from 'url';
 
-function getAssignments(input) {
+export function getAssignments(input) {
     let groups = input.split("\r\n");
     return groups.map(group => {
         return group.split(",").map(elf => {
@@ -19,10 +19,6 @@ function getOverlaps(assignments) {
     let overlaps = 0;
     assignments.forEach(assignment => {
         if(assignment[0].first <= assignment[1].first && assignment[0].second >= assignment[1].second) {
-            overlaps++;
-            return;
-        }
-        if(assignment[1].first <= assignment[0].first && assignment[1].second >= assignment[0].second) {
             overlaps++;
             return;
         }
