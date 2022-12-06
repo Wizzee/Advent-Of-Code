@@ -4,7 +4,8 @@ import { fileURLToPath } from 'url';
 
 function getStacks(lines) {
     const stacks = {};
-    lines.pop().split(" ").forEach(stack => {
+    let stackCols = lines.pop();
+    stackCols.forEach(stack => {
         if(stack !== "") {
             stacks[stack] = [];
         }
@@ -15,11 +16,13 @@ function getStacks(lines) {
 function populateStacks(stacks, lines) {
     // for each entry on a line, put a box on top of the stack
     // the stack should be the index of the line + 1
-    for(const [index, value] of lines) {
-        if(value !== "") {
-            stacks[index + 1].unshift(value);
-        }
-    }
+    lines.forEach((line) => {
+        line.forEach((box, index) => {
+            if(box !== "") {
+                stacks[index + 1].unshift(box);
+            }
+        });
+    });
 }
 
 function solve() {
@@ -28,11 +31,15 @@ function solve() {
         const __dirname = dirname(__filename);
 
         const inputs = fs.readFileSync(__dirname + "/input.txt", 'utf8');
-        const [boxes, instructions] = inputs.split("\n\n");
-        let lines = boxes.split("\n");
-        lines = lines.map(line => line.split(" "));
+        const [boxes, instructions] = inputs.split("\r\n\r\n");
+        let lines = boxes.split("\r\n");
+        lines = lines.map(line => line
+            .split(new RegExp("(.{3}(?= |\B))")) // split each line into the columns
+            .filter(Boolean) // filter out any empty results
+            .filter(x => x.length > 1) // filter out the spaces
+            .map(x => x.trim())) // remove whitespace on boxes
         const stacks = getStacks(lines);
-        populateStacks(stacks,lines)
+        populateStacks(stacks, lines)
         console.log(stacks);
         console.log(instructions);
         console.log(lines);
